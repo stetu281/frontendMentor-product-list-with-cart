@@ -1,3 +1,5 @@
+@use "./mixins" as *;
+
 :root {
   --color-red: hsl(14, 86%, 42%);
   --color-green: hsl(159, 69%, 38%);
@@ -7,6 +9,9 @@
   --color-rose-400: hsl(7, 20%, 60%);
   --color-rose-500: hsl(12, 20%, 44%);
   --color-rose-900: hsl(14, 65%, 9%);
+  --bp-s: 768px;
+  --bp-m: 1024px;
+  --bp-l: 1440px;
 }
 
 @font-face {
@@ -58,5 +63,16 @@ main {
 button {
   &:hover {
     cursor: pointer;
+  }
+}
+
+@include breakpoint(var(--bp-s)) {
+  main {
+    padding: 3rem 0;
+    width: 90%;
+    max-width: var(--bp-l);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 }
