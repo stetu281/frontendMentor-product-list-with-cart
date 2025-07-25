@@ -24,11 +24,11 @@ data.map((item, index) => {
                 <img src="${cartIcon}" alt="" />
                 <p>Add to Cart</p>
                 <span class="productButton__overlay">
-                    <span class="productButton__plusMinus">
+                    <span class="productButton__plusMinus" data-action="sub">
                         <img src="${minus}" alt="" />
                     </span>
                         <p class="productButton__counter">1</p>
-                    <span class="productButton__plusMinus">
+                    <span class="productButton__plusMinus" data-action="add">
                         <img src="${plus}" alt="" />
                     </span>
                 </span>
@@ -59,6 +59,29 @@ buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
     if (!e.target.matches("span")) {
       e.target.classList.add("productButton--show");
+    }
+  });
+});
+
+//Overlay Counter for List Item Button
+const counters = document.querySelectorAll(".productButton__overlay");
+
+counters.forEach((counter) => {
+  counter.addEventListener("click", (e) => {
+    let num = e.target.parentElement.querySelector("p");
+
+    if (e.target && e.target.matches("span.productButton__plusMinus")) {
+      if (e.target.dataset.action === "add") {
+        num.innerText++;
+      } else {
+        if (num.innerText == 1) {
+          e.target.parentElement.parentElement.classList.remove(
+            "productButton--show",
+          );
+        } else {
+          num.innerText--;
+        }
+      }
     }
   });
 });
