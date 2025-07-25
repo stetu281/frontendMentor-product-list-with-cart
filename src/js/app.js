@@ -51,3 +51,14 @@ function importAll(r) {
   });
   return images;
 }
+
+//Product List Item Button
+const buttons = document.querySelectorAll(".productButton");
+
+buttons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    if (!e.target.matches("span")) {
+      e.target.classList.add("productButton--show");
+    }
+  });
+});
