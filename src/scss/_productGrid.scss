@@ -1,6 +1,10 @@
 @use "./mixins" as *;
 
 .productGrid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 2rem;
+
   .product {
     &__img {
       display: block;
@@ -40,6 +44,8 @@
   }
 
   @include breakpoint(var(--bp-s)) {
+    width: 48%;
+
     .product {
       max-width: 427px;
     }

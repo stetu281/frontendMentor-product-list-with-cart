@@ -61,9 +61,29 @@ main {
   padding: 1.5rem 0;
 }
 
+h1 {
+  font-size: 2.5rem;
+}
+
 button {
   &:hover {
     cursor: pointer;
+  }
+
+  &.primary {
+    padding: 1rem 0;
+    width: 100%;
+    border: none;
+    border-radius: 100px;
+    background-color: var(--color-red);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: filter 0.3s ease-in-out;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
   }
 }
 
