@@ -36,7 +36,7 @@ data.map((item, index) => {
             <div class="product__text">
                 <p class="product__cat">${item.category}</p>
                 <h2 class="product__name">${item.name}</h2>
-                <p class="product__price">$${item.price}</p>
+                <p class="product__price">$<span>${item.price.toFixed(2)}</span></p>
             </div>
     `;
 
@@ -59,6 +59,15 @@ buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
     if (!e.target.matches("span")) {
       e.target.classList.add("productButton--show");
+
+      const product = e.target.parentElement;
+      let cartItemData = {
+        id: product.dataset.id,
+        name: product.querySelector("h2.product__name").innerText,
+        price: product.querySelector("p.product__price span").innerText,
+        qty: 1,
+      };
+      renderCartItem(cartItemData);
     }
   });
 });
@@ -85,3 +94,23 @@ counters.forEach((counter) => {
     }
   });
 });
+
+//render Cart Item
+function renderCartItem(data) {
+  console.log(data);
+  const li = document.createElement("li");
+  li.classList = "cartItem";
+  li.innerHTML = `
+    <div class="cartItem__text">
+      <h3>${data.name}</h3>
+      <p>
+          <span class="cartItem__qty">${data.qty}x</span>
+          <span class="cartItem__price">@ ${data.price}</span>
+          <span class="cartItem__total">$${data.qty * data.price}</span>
+      </p>
+    </div>
+    <button class="cartItem__remove"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10"><path fill="#CAAFA7" d="M8.375 9.375 5 6 1.625 9.375l-1-1L4 5 .625 1.625l1-1L5 4 8.375.625l1 1L6 5l3.375 3.375-1 1Z"/></svg></button>
+  `;
+
+  document.querySelector(".cart__listContainer").appendChild(li);
+}
