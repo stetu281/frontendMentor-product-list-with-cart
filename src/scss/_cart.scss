@@ -56,12 +56,6 @@
   &__button {
     margin-top: 1.5rem;
   }
-
-  @include breakpoint(var(--bp-s)) {
-    width: 48%;
-    position: sticky;
-    top: 4rem;
-  }
 }
 
 .cartItem {

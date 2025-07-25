@@ -9,9 +9,6 @@
   --color-rose-400: hsl(7, 20%, 60%);
   --color-rose-500: hsl(12, 20%, 44%);
   --color-rose-900: hsl(14, 65%, 9%);
-  --bp-s: 768px;
-  --bp-m: 1024px;
-  --bp-l: 1440px;
   --br-s: 0.5rem;
 }
 
@@ -87,13 +84,40 @@ button {
   }
 }
 
-@include breakpoint(var(--bp-s)) {
+@include breakpoint(768px) {
   main {
     padding: 3rem 0;
     width: 90%;
-    max-width: var(--bp-l);
+    max-width: 1440px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+  }
+
+  section.content,
+  section.cart {
+    width: 48%;
+  }
+
+  section.cart {
+    position: sticky;
+    top: 5rem;
+  }
+}
+
+@include breakpoint(1024px) {
+  main {
+    padding: 3rem 0 6rem 0;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  section.content {
+    width: unset;
+    flex-grow: 2;
+  }
+
+  section.cart {
+    width: unset;
   }
 }

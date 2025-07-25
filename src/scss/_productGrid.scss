@@ -51,14 +51,6 @@
     }
   }
 
-  @include breakpoint(var(--bp-s)) {
-    width: 48%;
-
-    .product {
-      max-width: 427px;
-    }
-  }
-
   .productButton {
     margin: 0 auto;
     padding: 0.75rem 1.75rem;
@@ -122,6 +114,14 @@
       &:hover {
         cursor: pointer;
       }
+    }
+  }
+
+  @include breakpoint(768px) {
+    grid-template-columns: repeat(auto-fit, minmax(296px, 340px));
+
+    .product {
+      max-width: 427px;
     }
   }
 }
