@@ -54,7 +54,7 @@ function importAll(r) {
 
 //Product List Item Button
 const buttons = document.querySelectorAll(".productButton");
-let cart = [];
+let cartArray = [];
 
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
@@ -69,8 +69,9 @@ buttons.forEach((button) => {
         qty: 1,
       };
       renderCartItem(cartItemData);
-      cart.push(cartItemData);
+      cartArray.push(cartItemData);
     }
+    console.log(cartArray);
   });
 });
 
@@ -92,12 +93,14 @@ counters.forEach((counter) => {
             "productButton--show",
           );
           removeCartItem(id);
+          removeFromCartArray(id);
         } else {
           num.innerText--;
           updateCartItem(id, parseInt(num.innerText), 0);
         }
       }
     }
+    console.log(cartArray);
   });
 });
 
@@ -131,6 +134,7 @@ function updateCartItem(id, qty, operator) {
   itemQty.innerText = qty;
   itemTotal.innerText = (qty * itemPrice).toFixed(2);
   updateOrderTotal(itemPrice, operator);
+  updateCartArray(id, qty);
 }
 
 function removeCartItem(id) {
@@ -151,4 +155,17 @@ function updateOrderTotal(price, operator) {
   } else {
     orderTotal.innerText = (orderTotalNum - price).toFixed(2);
   }
+}
+
+function updateCartArray(id, qty) {
+  for (const item of cartArray) {
+    if (item.id === id) {
+      item.qty = qty;
+    }
+  }
+}
+
+function removeFromCartArray(id) {
+  const index = cartArray.map((item) => item.id).indexOf(id);
+  index >= 0 && cartArray.splice(index, 1);
 }
