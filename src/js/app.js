@@ -54,6 +54,7 @@ function importAll(r) {
 
 //Product List Item Button
 const buttons = document.querySelectorAll(".productButton");
+let cart = [];
 
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
@@ -68,6 +69,7 @@ buttons.forEach((button) => {
         qty: 1,
       };
       renderCartItem(cartItemData);
+      cart.push(cartItemData);
     }
   });
 });
@@ -78,17 +80,21 @@ const counters = document.querySelectorAll(".productButton__overlay");
 counters.forEach((counter) => {
   counter.addEventListener("click", (e) => {
     let num = e.target.parentElement.querySelector("p");
+    let id = e.target.parentElement.parentElement.parentElement.dataset.id;
 
     if (e.target && e.target.matches("span.productButton__plusMinus")) {
       if (e.target.dataset.action === "add") {
         num.innerText++;
+        updateCartItem(id, parseInt(num.innerText));
       } else {
         if (num.innerText == 1) {
           e.target.parentElement.parentElement.classList.remove(
             "productButton--show",
           );
+          removeCartItem(id);
         } else {
           num.innerText--;
+          updateCartItem(id, parseInt(num.innerText));
         }
       }
     }
@@ -97,20 +103,36 @@ counters.forEach((counter) => {
 
 //render Cart Item
 function renderCartItem(data) {
-  console.log(data);
   const li = document.createElement("li");
   li.classList = "cartItem";
   li.innerHTML = `
-    <div class="cartItem__text">
+    <div class="cartItem__text" data-cartItemId=${data.id}>
       <h3>${data.name}</h3>
       <p>
-          <span class="cartItem__qty">${data.qty}x</span>
-          <span class="cartItem__price">@ ${data.price}</span>
-          <span class="cartItem__total">$${data.qty * data.price}</span>
+          <span class="cartItem__qty"><span>${data.qty}</span>x</span>
+          <span class="cartItem__price">@ <span>${data.price}</span></span>
+          <span class="cartItem__total">$<span>${data.price}</span></span>
       </p>
     </div>
     <button class="cartItem__remove"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10"><path fill="#CAAFA7" d="M8.375 9.375 5 6 1.625 9.375l-1-1L4 5 .625 1.625l1-1L5 4 8.375.625l1 1L6 5l3.375 3.375-1 1Z"/></svg></button>
   `;
 
   document.querySelector(".cart__listContainer").appendChild(li);
+}
+
+function updateCartItem(id, qty) {
+  let item = document.querySelector(`[data-cartitemid="${id}"]`);
+  let itemQty = item.querySelector(".cartItem__qty span");
+  let itemPrice = parseFloat(
+    item.querySelector(".cartItem__price span").innerText,
+  );
+  let itemTotal = item.querySelector(".cartItem__total span");
+  itemQty.innerText = qty;
+  itemTotal.innerText = (qty * itemPrice).toFixed(2);
+}
+
+function removeCartItem(id) {
+  const item = document.querySelector(`[data-cartitemid="${id}"]`);
+
+  item.parentElement.remove();
 }
