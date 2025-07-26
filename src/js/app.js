@@ -85,7 +85,7 @@ counters.forEach((counter) => {
     if (e.target && e.target.matches("span.productButton__plusMinus")) {
       if (e.target.dataset.action === "add") {
         num.innerText++;
-        updateCartItem(id, parseInt(num.innerText));
+        updateCartItem(id, parseInt(num.innerText), 1);
       } else {
         if (num.innerText == 1) {
           e.target.parentElement.parentElement.classList.remove(
@@ -94,7 +94,7 @@ counters.forEach((counter) => {
           removeCartItem(id);
         } else {
           num.innerText--;
-          updateCartItem(id, parseInt(num.innerText));
+          updateCartItem(id, parseInt(num.innerText), 0);
         }
       }
     }
@@ -118,9 +118,10 @@ function renderCartItem(data) {
   `;
 
   document.querySelector(".cart__listContainer").appendChild(li);
+  updateOrderTotal(parseFloat(data.price), 1);
 }
 
-function updateCartItem(id, qty) {
+function updateCartItem(id, qty, operator) {
   let item = document.querySelector(`[data-cartitemid="${id}"]`);
   let itemQty = item.querySelector(".cartItem__qty span");
   let itemPrice = parseFloat(
@@ -129,10 +130,25 @@ function updateCartItem(id, qty) {
   let itemTotal = item.querySelector(".cartItem__total span");
   itemQty.innerText = qty;
   itemTotal.innerText = (qty * itemPrice).toFixed(2);
+  updateOrderTotal(itemPrice, operator);
 }
 
 function removeCartItem(id) {
   const item = document.querySelector(`[data-cartitemid="${id}"]`);
+  const itemPrice = parseFloat(
+    item.querySelector(".cartItem__price span").innerText,
+  );
+  updateOrderTotal(itemPrice, 0);
 
   item.parentElement.remove();
+}
+
+function updateOrderTotal(price, operator) {
+  const orderTotal = document.querySelector(".cart__orderTotal span");
+  let orderTotalNum = parseFloat(orderTotal.innerText);
+  if (operator === 1) {
+    orderTotal.innerText = (orderTotalNum + price).toFixed(2);
+  } else {
+    orderTotal.innerText = (orderTotalNum - price).toFixed(2);
+  }
 }
