@@ -1,0 +1,123 @@
+@use "./mixins" as *;
+
+.confirm {
+  position: fixed;
+  width: 100%;
+  height: 100dvh;
+  bottom: -100%;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: bottom 0.6s ease-in-out;
+
+  &--open {
+    bottom: 0;
+  }
+
+  &__content {
+    padding: 2rem 7% 1.5rem 7%;
+    width: 100%;
+    max-height: 100dvh;
+    overflow-y: scroll;
+    position: absolute;
+    bottom: 0;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    background-color: white;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+  }
+
+  &__list {
+    margin-top: 2rem;
+
+    li {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--color-rose-100);
+      background-color: var(--color-rose-50);
+
+      &:first-of-type {
+        border-top-left-radius: var(--br-s);
+        border-top-right-radius: var(--br-s);
+      }
+
+      img {
+        width: 20%;
+        max-width: 48px;
+        height: auto;
+        border-radius: var(--br-s);
+      }
+
+      h3 {
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .confirm__itemText {
+        margin-left: 1rem;
+        width: 58%;
+      }
+
+      p {
+        .confirm__qty {
+          color: var(--color-red);
+        }
+
+        .confirm__price {
+          margin-left: 1rem;
+        }
+      }
+
+      p.confirm__total {
+        width: 22%;
+        text-align: right;
+        justify-self: flex-end;
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__orderTotal {
+    padding: 2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom-left-radius: var(--br-s);
+    border-bottom-right-radius: var(--br-s);
+    background-color: var(--color-rose-50);
+
+    span {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+  }
+
+  &__button {
+    margin-top: 2rem;
+  }
+
+  @include breakpoint(768px) {
+    &__content {
+      max-width: 640px;
+      height: fit-content;
+      max-height: 90dvh;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 0.75rem;
+    }
+  }
+}

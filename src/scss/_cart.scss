@@ -111,5 +111,9 @@
     background-color: white;
     border-radius: 100%;
     border: 1px solid var(--color-rose-400);
+
+    svg {
+      pointer-events: none;
+    }
   }
 }
