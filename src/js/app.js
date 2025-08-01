@@ -6,6 +6,7 @@ const images = importAll(
 import cartIcon from "../assets/images/icon-add-to-cart.svg";
 import plus from "../assets/images/icon-increment-quantity.svg";
 import minus from "../assets/images/icon-decrement-quantity.svg";
+window.handleRemoveClick = handleRemoveClick;
 
 //render Product Items to Grid
 const grid = document.querySelector(".productGrid");
@@ -15,7 +16,7 @@ data.map((item, index) => {
   li.classList = "product";
   li.dataset.id = index;
   li.innerHTML = `
-                <picture class="product__img">
+                <picture class="product__img" data-thumbnail=${item.image.thumbnail}>
                 <source media="(min-width: 1440px)" srcset="assets/${item.image.desktop}" width="502" height="480" />
                 <source media="(min-width: 768px)" srcset="assets/${item.image.tablet}" width="427" height="424" />
                 <img src="assets/${item.image.mobile}" alt="${item.name}" height="424" width="654" />
@@ -66,6 +67,7 @@ buttons.forEach((button) => {
         id: product.dataset.id,
         name: product.querySelector("h2.product__name").innerText,
         price: product.querySelector("p.product__price span").innerText,
+        image: e.target.previousElementSibling.dataset.thumbnail,
         qty: 1,
       };
       renderCartItem(cartItemData);
@@ -109,6 +111,44 @@ counters.forEach((counter) => {
   });
 });
 
+//Confirm Order Button
+document.querySelector(".cart__button").addEventListener("click", (e) => {
+  let sum = 0;
+
+  if (cartArray.length === 0) {
+    e.target.innerText = "Cart is empty";
+    setTimeout(() => {
+      e.target.innerText = "Confirm order";
+    }, 2000);
+  } else {
+    document.querySelector(".confirm").classList.add("confirm--open");
+
+    cartArray.map((item) => {
+      sum += item.qty * item.price;
+      const li = document.createElement("li");
+      li.innerHTML = `
+      <img src="assets/${item.image}" alt="" />
+      <div class="confirm__itemText">
+        <h3>Vanilla Bean Creme Brullee</h3>
+        <p>
+          <span class="confirm__qty">${item.qty}x</span><span class="confirm__price">@ $${item.price}</span>
+        </p>
+      </div>
+      <p class="confirm__total">$${(item.qty * item.price).toFixed(2)}</p>
+  `;
+
+      document.querySelector(".confirm__list").appendChild(li);
+    });
+
+    document.querySelector(".confirm__orderTotalNum").innerText =
+      sum.toFixed(2);
+
+    document.querySelector(".confirm__button").addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
+});
+
 //render Cart Item
 function renderCartItem(data) {
   const li = document.createElement("li");
@@ -122,11 +162,36 @@ function renderCartItem(data) {
           <span class="cartItem__total">$<span>${data.price}</span></span>
       </p>
     </div>
-    <button class="cartItem__remove"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10"><path fill="#CAAFA7" d="M8.375 9.375 5 6 1.625 9.375l-1-1L4 5 .625 1.625l1-1L5 4 8.375.625l1 1L6 5l3.375 3.375-1 1Z"/></svg></button>
+    <button class="cartItem__remove" onclick="handleRemoveClick(this)"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="none" viewBox="0 0 10 10"><path fill="#CAAFA7" d="M8.375 9.375 5 6 1.625 9.375l-1-1L4 5 .625 1.625l1-1L5 4 8.375.625l1 1L6 5l3.375 3.375-1 1Z"/></svg></button>
   `;
 
   document.querySelector(".cart__listContainer").appendChild(li);
+
   updateOrderTotal(parseFloat(data.price), 1);
+}
+
+function handleRemoveClick(e) {
+  let id = e.parentElement.firstElementChild.dataset.cartitemid;
+  let total = parseFloat(
+    e.parentElement.firstElementChild.querySelector(".cartItem__total span")
+      .innerText,
+  );
+  const orderTotal = document.querySelector(".cart__orderTotal span");
+  let orderTotalNum = parseFloat(orderTotal.innerText);
+
+  removeCartItem(id);
+  removeFromCartArray(id);
+  updateCartItemsCount();
+
+  orderTotal.innerText = (orderTotalNum - total).toFixed(2);
+
+  document
+    .querySelector(`[data-id="${id}"] > button`)
+    .classList.remove("productButton--show");
+
+  document
+    .querySelector(`[data-id="${id}"] > button`)
+    .querySelector(".productButton__counter").innerText = 1;
 }
 
 function updateCartItem(id, qty, operator) {
@@ -144,9 +209,11 @@ function updateCartItem(id, qty, operator) {
 
 function removeCartItem(id) {
   const item = document.querySelector(`[data-cartitemid="${id}"]`);
+
   const itemPrice = parseFloat(
     item.querySelector(".cartItem__price span").innerText,
   );
+  console.log(itemPrice);
   updateOrderTotal(itemPrice, 0);
 
   item.parentElement.remove();
