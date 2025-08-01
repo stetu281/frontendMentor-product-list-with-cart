@@ -70,8 +70,8 @@ buttons.forEach((button) => {
       };
       renderCartItem(cartItemData);
       cartArray.push(cartItemData);
+      updateCartItemsCount();
     }
-    console.log(cartArray);
   });
 });
 
@@ -87,6 +87,7 @@ counters.forEach((counter) => {
       if (e.target.dataset.action === "add") {
         num.innerText++;
         updateCartItem(id, parseInt(num.innerText), 1);
+        updateCartItemsCount();
       } else {
         if (num.innerText == 1) {
           e.target.parentElement.parentElement.classList.remove(
@@ -94,13 +95,14 @@ counters.forEach((counter) => {
           );
           removeCartItem(id);
           removeFromCartArray(id);
+          updateCartItemsCount();
         } else {
           num.innerText--;
           updateCartItem(id, parseInt(num.innerText), 0);
+          updateCartItemsCount();
         }
       }
     }
-    console.log(cartArray);
   });
 });
 
@@ -168,4 +170,10 @@ function updateCartArray(id, qty) {
 function removeFromCartArray(id) {
   const index = cartArray.map((item) => item.id).indexOf(id);
   index >= 0 && cartArray.splice(index, 1);
+}
+
+function updateCartItemsCount() {
+  let cartCount = cartArray.reduce((n, { qty }) => n + qty, 0);
+
+  document.querySelector(".cart__count").innerText = cartCount;
 }
