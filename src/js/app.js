@@ -71,6 +71,7 @@ buttons.forEach((button) => {
       renderCartItem(cartItemData);
       cartArray.push(cartItemData);
       updateCartItemsCount();
+      checkEmptyCart();
     }
   });
 });
@@ -96,10 +97,12 @@ counters.forEach((counter) => {
           removeCartItem(id);
           removeFromCartArray(id);
           updateCartItemsCount();
+          checkEmptyCart();
         } else {
           num.innerText--;
           updateCartItem(id, parseInt(num.innerText), 0);
           updateCartItemsCount();
+          checkEmptyCart;
         }
       }
     }
@@ -176,4 +179,12 @@ function updateCartItemsCount() {
   let cartCount = cartArray.reduce((n, { qty }) => n + qty, 0);
 
   document.querySelector(".cart__count").innerText = cartCount;
+}
+
+function checkEmptyCart() {
+  if (cartArray.length >= 1) {
+    document.querySelector(".cart__empty").classList.add("hide");
+  } else {
+    document.querySelector(".cart__empty").classList.remove("hide");
+  }
 }
