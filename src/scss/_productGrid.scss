@@ -118,7 +118,7 @@
   }
 
   @include breakpoint(768px) {
-    grid-template-columns: repeat(auto-fit, minmax(296px, 340px));
+    grid-template-columns: repeat(auto-fit, 288px);
 
     .product {
       max-width: 427px;
